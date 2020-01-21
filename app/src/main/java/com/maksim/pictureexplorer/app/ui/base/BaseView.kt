@@ -1,5 +1,6 @@
 package com.maksim.pictureexplorer.app.ui.base
 
+import android.view.View
 import com.maksim.pictureexplorer.app.di.AppContainer
 
 /**
@@ -14,5 +15,7 @@ interface BaseView {
   fun hideLoading()
 
   fun getAppContainer(): AppContainer
+
+  fun closeKeyboard(view: View)
 
 }

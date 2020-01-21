@@ -23,15 +23,28 @@ class MainActivity : BaseActivity() {
 
     val searchItem = menu.findItem(R.id.search)
     val searchView = searchItem.actionView as SearchView
+
     searchView.setOnQueryTextListener(object : android.widget.SearchView.OnQueryTextListener,
       SearchView.OnQueryTextListener {
-      override fun onQueryTextSubmit(query: String?): Boolean {
-        return false
+      override fun onQueryTextSubmit(query: String): Boolean {
+        Log.d("LogTag", "OnText submit: $query")
+
+        if (query.isNotBlank()) {
+          //TODO make request to API
+
+
+          //Close keyboard and clear focus from search input
+          closeKeyboard(searchView)
+          searchView.clearFocus()
+        }
+
+
+        return true
       }
 
       override fun onQueryTextChange(newText: String?): Boolean {
-        Log.d("LogTag", "OnText change: $newText")
-        return true
+        //Log.d("LogTag", "OnText change: $newText")
+        return false
       }
     })
 
