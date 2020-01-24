@@ -1,4 +1,4 @@
-package com.maksim.pictureexplorer.app.ui.model
+package com.maksim.pictureexplorer.app.ui.image.model
 
 /**
  * Created by Maksim Novikov on 21-Jan-20.
