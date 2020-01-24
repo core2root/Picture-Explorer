@@ -31,6 +31,8 @@ ext{
     picassoVersion = "2.71828"
     retrofitVersion = "2.7.1"
     lifecycleVersion = "2.1.0"
+    rxJavaAndroidVersion = "2.1.1"
+    rxJavaVersion = "2.2.13"
 }
 
 dependencies {
@@ -52,4 +54,7 @@ dependencies {
 
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
+
+    implementation "io.reactivex.rxjava2:rxandroid:$rxJavaAndroidVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 }

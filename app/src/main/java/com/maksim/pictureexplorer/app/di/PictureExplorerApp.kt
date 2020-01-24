@@ -11,7 +11,7 @@ class PictureExplorerApp : Application() {
 
   override fun onCreate() {
 
-    appContainer = AppContainer()
+    appContainer = AppContainer(applicationContext)
 
     super.onCreate()
   }

@@ -1,5 +1,6 @@
 package com.maksim.pictureexplorer.app.ui.image
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,8 @@ import com.squareup.picasso.Picasso
  */
 class ImageAdapter(
   private val clickListener: (ImageModel) -> Unit,
-  var images: MutableList<ImageModel> = mutableListOf()
+  private val lastImageBindListener: () -> Unit,
+  var images: List<ImageModel> = listOf()
 ) :
   RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
   
@@ -31,8 +33,16 @@ class ImageAdapter(
   
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     
+    if(images.size-1 == position){
+      Log.d("LogTag", "Last image shown")
+      lastImageBindListener()
+    }
+    
     val current = images[position]
-    Picasso.get().load(current.previewUrl).into(holder.image)
+    Picasso.get()
+      .load(current.previewUrl)
+      .placeholder(R.drawable.ic_placeholder)
+      .into(holder.image)
     
     val imageRes = if (current.isFavorite) R.drawable.ic_favorite else R.drawable.ic_not_favorite
     holder.isFavoriteIv.setImageResource(imageRes)
@@ -44,9 +54,8 @@ class ImageAdapter(
     return images.size
   }
   
-  
-  fun addImages(images: List<ImageModel>) {
-    this.images.addAll(images)
+  fun setImageModels(images: List<ImageModel>) {
+    this.images = images
     notifyDataSetChanged()
   }
   
