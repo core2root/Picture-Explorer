@@ -1,13 +1,9 @@
 package com.maksim.pictureexplorer.data.remote
 
-import android.os.Build
-import android.util.Log
 import com.maksim.pictureexplorer.data.model.ApiImageSearchResult
 import com.maksim.pictureexplorer.data.model.mapper.ApiImageMapper
 import com.maksim.pictureexplorer.domain.model.ImageSearchResult
 import io.reactivex.Single
-import okhttp3.ConnectionSpec
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,7 +30,6 @@ class ImageServiceImpl(private val mapper: ApiImageMapper) : ImageService {
     
   }
   
-  
   override fun getImages(searchQuery: String, pageNumber: Int): Single<ImageSearchResult> {
     
     return Single.create<ImageSearchResult> { emitter ->
@@ -54,9 +49,7 @@ class ImageServiceImpl(private val mapper: ApiImageMapper) : ImageService {
           
           override fun onFailure(call: Call<ApiImageSearchResult>, t: Throwable) {
             val errorMessage = t.message ?: "Unknown error while requesting images"
-            emitter.onError(Throwable("Unknown error while requesting images"))
-            Log.e("LogTag", "Error: $errorMessage")
-            
+            emitter.onError(Throwable("Error: $errorMessage"))
           }
         })
     }

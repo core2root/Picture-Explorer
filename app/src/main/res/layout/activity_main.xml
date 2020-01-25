@@ -5,9 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#333"
     tools:context=".app.ui.image.MainActivity">
 
     <TextView
+        android:textColor="#fff"
         android:textSize="20sp"
         android:id="@+id/message_tv"
         android:layout_width="wrap_content"

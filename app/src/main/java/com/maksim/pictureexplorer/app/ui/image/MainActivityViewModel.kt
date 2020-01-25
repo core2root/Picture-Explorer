@@ -55,15 +55,16 @@ class MainActivityViewModel(
     }
     
     currentSearch.searchQuery = searchQuery
-    currentSearch.pageNumber =
+    val nextPage =
       if (currentSearch.pageNumber == 0) 1 else (currentSearch.pageNumber + 1)
     
-    val disposable = getImagesUseCase.execute(searchQuery, currentSearch.pageNumber)
+    val disposable = getImagesUseCase.execute(searchQuery, nextPage)
       .subscribeOn(Schedulers.io())
       .subscribe({ searchResult ->
         
         currentSearch.total = searchResult.total
         currentSearch.totalHits = searchResult.totalHits
+        currentSearch.pageNumber = nextPage
         
         val images = mapper.domainToModel(searchResult.images)
         totalImages.addAll(images)

@@ -1,6 +1,7 @@
 package com.maksim.pictureexplorer.app.ui.image
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.widget.SearchView
@@ -11,7 +12,10 @@ import com.maksim.pictureexplorer.R
 import com.maksim.pictureexplorer.app.di.ViewModelFactory
 import com.maksim.pictureexplorer.app.ui.base.BaseActivity
 import com.maksim.pictureexplorer.app.ui.image.model.ImageModel
+import io.reactivex.exceptions.UndeliverableException
+import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.InterruptedIOException
 
 class MainActivity : BaseActivity() {
   
@@ -44,6 +48,22 @@ class MainActivity : BaseActivity() {
     subscribeToObservers(viewModel)
     
     images_rc.adapter = adapter
+ 
+    
+    //Handle undeliverable exception
+    RxJavaPlugins.setErrorHandler { e ->
+      if (e is UndeliverableException) {
+        val causeError = e.cause
+        if (causeError is InterruptedIOException) {
+          Log.d("LogTag", e.message)
+          //Caused by disposing the stream before result, nothing to do here
+        } else {
+          runOnUiThread(Runnable {
+            showMessage(causeError?.message ?: "Unknown error")
+          })
+        }
+      }
+    }
   }
   
   private fun subscribeToObservers(viewModel: MainActivityViewModel) {
