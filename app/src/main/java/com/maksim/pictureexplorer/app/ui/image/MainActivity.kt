@@ -1,14 +1,12 @@
 package com.maksim.pictureexplorer.app.ui.image
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.maksim.pictureexplorer.R
 import com.maksim.pictureexplorer.app.di.ViewModelFactory
 import com.maksim.pictureexplorer.app.ui.base.BaseActivity
@@ -20,9 +18,17 @@ class MainActivity : BaseActivity() {
   private lateinit var viewModel: MainActivityViewModel
   
   private val adapter: ImageAdapter by lazy {
-    val layoutManager = GridLayoutManager(this, calculateColumnCount(110F + pxToDp(24)))
+    val layoutManager = GridLayoutManager(
+      this,
+      calculateColumnCount(110F + pxToDp(ImageAdapter.ADAPTER_ITEM_SPACING))
+    )
     
-    val spacingItemDecoration = GridSpacingItemDecoration(calculateColumnCount(110F), 24, true, 0)
+    val spacingItemDecoration = GridSpacingItemDecoration(
+      calculateColumnCount(110F),
+      ImageAdapter.ADAPTER_ITEM_SPACING,
+      true, 0
+    )
+    
     images_rc.layoutManager = layoutManager
     images_rc.addItemDecoration(spacingItemDecoration)
     ImageAdapter(imageClickListener, onLastImageShownListener)
@@ -44,9 +50,10 @@ class MainActivity : BaseActivity() {
     
     viewModel.getTotalImagesLiveData().observe(this, Observer { images ->
       adapter.setImageModels(images)
+      updateMessageTvState("", false)
     })
     
-    viewModel.getErrorMessageLiveDat().observe(this, Observer { errorMessage ->
+    viewModel.getErrorMessageLiveData().observe(this, Observer { errorMessage ->
       showMessage(errorMessage)
     })
     
@@ -54,14 +61,17 @@ class MainActivity : BaseActivity() {
       if (shouldShowLoading) showLoading() else hideLoading()
     })
     
+    viewModel.getMessageLiveData().observe(this, Observer { message ->
+      updateMessageTvState(message, true)
+    })
   }
+  
   
   private fun getNextImages(searchQuery: String) {
     viewModel.getNextImages(searchQuery)
   }
   
   private val imageClickListener: (ImageModel) -> Unit = { image ->
-    Log.d("LogTag", "image clicked: ${image.id}")
     val newStatus = !image.isFavorite
     image.isFavorite = newStatus
     adapter.notifyDataSetChanged()
@@ -82,28 +92,34 @@ class MainActivity : BaseActivity() {
     searchView.setOnQueryTextListener(object : android.widget.SearchView.OnQueryTextListener,
       SearchView.OnQueryTextListener {
       override fun onQueryTextSubmit(query: String): Boolean {
-        Log.d("LogTag", "OnText submit: $query")
         
         if (query.isNotBlank()) {
-          //TODO make request to API
           getNextImages(query)
           
           //Close keyboard and clear focus from search input
           closeKeyboard(searchView)
           searchView.clearFocus()
+          
+          //Hide the initial message
+          updateMessageTvState("", false)
+        }else{
+          showMessage("Search query cannot by empty")
         }
-        
         
         return true
       }
       
       override fun onQueryTextChange(newText: String?): Boolean {
-        //Log.d("LogTag", "OnText change: $newText")
         return false
       }
     })
     
     return true
+  }
+  
+  private fun updateMessageTvState(message: String, visibility: Boolean) {
+    message_tv.text = message
+    message_tv.visibility = if (visibility) View.VISIBLE else View.INVISIBLE
   }
   
   override fun showLoading() {

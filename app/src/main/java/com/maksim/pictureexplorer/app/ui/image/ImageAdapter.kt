@@ -20,6 +20,9 @@ class ImageAdapter(
 ) :
   RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
   
+  companion object {
+    const val ADAPTER_ITEM_SPACING = 24
+  }
   
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
     return ViewHolder(
@@ -33,8 +36,7 @@ class ImageAdapter(
   
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     
-    if(images.size-1 == position){
-      Log.d("LogTag", "Last image shown")
+    if (images.size - 1 == position) {
       lastImageBindListener()
     }
     

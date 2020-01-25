@@ -13,6 +13,6 @@ interface ApiImageMapper {
   fun apiToDomain(apiImage: ApiImage): AppImage
   fun apiToDomain(apiImages: List<ApiImage>): List<AppImage>
   
-  fun apiToDomain(apiSearchResult: ApiImageSearchResult, pageNumber: Int): ImageSearchResult
+  fun apiToDomain(api: ApiImageSearchResult, pageNumber: Int): ImageSearchResult
   
 }

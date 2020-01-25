@@ -1,10 +1,13 @@
 package com.maksim.pictureexplorer.data.remote
 
+import android.os.Build
 import android.util.Log
 import com.maksim.pictureexplorer.data.model.ApiImageSearchResult
 import com.maksim.pictureexplorer.data.model.mapper.ApiImageMapper
 import com.maksim.pictureexplorer.domain.model.ImageSearchResult
 import io.reactivex.Single
+import okhttp3.ConnectionSpec
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,7 +31,6 @@ class ImageServiceImpl(private val mapper: ApiImageMapper) : ImageService {
     
     imageApi = retrofit.create(ImageApi::class.java)
     
-    //testFetchImages("smile")
     
   }
   

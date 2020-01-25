@@ -19,7 +19,12 @@ class ApiImageMapperImpl : ApiImageMapper {
     return apiImages.map { image -> apiToDomain(image) }
   }
   
-  override fun apiToDomain(apiSearchResult: ApiImageSearchResult, pageNumber: Int): ImageSearchResult {
-    return ImageSearchResult(apiToDomain(apiSearchResult.hits), pageNumber)
+  override fun apiToDomain(api: ApiImageSearchResult, pageNumber: Int): ImageSearchResult {
+    return ImageSearchResult(
+      apiToDomain(api.hits),
+      pageNumber,
+      api.total,
+      api.totalHits
+    )
   }
 }
